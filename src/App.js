@@ -9,6 +9,7 @@ export default () => {
 
   const [movieList, setMovieList] = useState([])
   const [featureData, setFeatureData] = useState(null)
+  const [darkHeader, setDarkHeader] = useState(false)
 
   useEffect(() => {
     const loadAll = async () => {
@@ -27,10 +28,25 @@ export default () => {
     loadAll()
   }, [])
 
+  useEffect(() => {
+    const scrollListener = () => {
+      if(window.scrollY > 10) {
+        setDarkHeader(true)
+      } else {
+        setDarkHeader(false)
+      }
+    }
+
+    window.addEventListener('scroll', scrollListener)
+    return () => {
+      window.removeEventListener('scroll', scrollListener)
+    }
+  }, [])
+
   return (
     <div className="page">
 
-      <Header />
+      <Header dark={darkHeader} />
 
       {featureData &&
         <FeatureMovie item={featureData} />
